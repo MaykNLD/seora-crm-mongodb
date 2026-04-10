@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: crm_web
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env                         # SECRET_KEY and MONGO_URI loaded from .env
+    environment:
+      - MONGO_URI=mongodb://crm_mongo:27017/crm
+    depends_on:
+      - mongo
+    restart: always
+
+  mongo:
+    image: mongo:7.0
+    container_name: crm_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_crm_data:/data/db
+    restart: always
+
+volumes:
+  mongo_crm_data:

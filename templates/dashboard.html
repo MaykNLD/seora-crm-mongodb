@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Financial Overview</h1>
+      <p class="page-subtitle">Here is what is happening with your store today.</p>
+    </div>
+    <a href="/api/v1/dashboard" target="_blank" class="btn btn-outline">
+      <i data-lucide="code-2" style="width:16px;height:16px;"></i> API JSON
+    </a>
+  </header>
+
+  <!-- METRIC CARDS -->
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <span class="metric-label">Total Revenue</span>
+      <span class="metric-value">&euro;{{ "{:,.0f}".format(stats.total_revenue) }}</span>
+      <span class="metric-tag up"><i data-lucide="trending-up" style="width:12px;height:12px;"></i> From sales</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Net Profit</span>
+      <span class="metric-value">&euro;{{ "{:,.0f}".format(stats.net_profit) }}</span>
+      <span class="metric-tag up"><i data-lucide="trending-up" style="width:12px;height:12px;"></i> Revenue - Purchases</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Instruments Sold</span>
+      <span class="metric-value">{{ stats.instruments_sold }}</span>
+      <span class="metric-tag info">Total transactions</span>
+    </div>
+    <div class="metric-card">
+      <span class="metric-label">Active Repairs</span>
+      <span class="metric-value">{{ stats.active_repairs }}</span>
+      <span class="metric-tag warn">Pending / In progress</span>
+    </div>
+  </div>
+
+  <!-- CHARTS + RECENTS -->
+  <div class="dash-grid">
+    <div class="chart-card">
+      <h2 class="chart-title">Weekly Revenue (Sample)</h2>
+      <div class="bar-chart">
+        {% set days = [('Mon',40),('Tue',62),('Wed',45),('Thu',80),('Fri',100),('Sat',72),('Sun',55)] %}
+        {% for day, h in days %}
+        <div class="bar-wrap">
+          <div class="bar" style="height:{{ h }}%;" title="{{ day }}: {{ h }}% activity"></div>
+          <span class="bar-label">{{ day }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="recent-card">
+      <h2>Recent Sales</h2>
+      {% if stats.recent_sales %}
+        {% for tx, customer, instrument in stats.recent_sales %}
+        <div class="recent-item">
+          <div>
+            <p class="recent-name">{{ instrument.name }}</p>
+            <p class="recent-meta">{{ customer.name }} &bull; {{ tx.date.strftime('%b %d') }}</p>
+          </div>
+          <span class="recent-price">&euro;{{ "{:,.0f}".format(tx.amount) }}</span>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p style="color:var(--text-secondary); font-size:0.9rem; margin-top:0.5rem;">No sales yet.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div class="two-col">
+    <div class="chart-card">
+      <h2 class="chart-title">Quick Actions</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:0.5rem;">
+        <a href="{{ url_for('add_instrument') }}" class="btn btn-primary btn-sm">
+          <i data-lucide="plus" style="width:14px;height:14px;"></i> New Instrument
+        </a>
+        <button class="btn btn-outline btn-sm" onclick="openModal('modal-transaction')">
+          <i data-lucide="arrow-right-left" style="width:14px;height:14px;"></i> New Transaction
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="openModal('modal-repair')">
+          <i data-lucide="wrench" style="width:14px;height:14px;"></i> New Repair
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="openModal('modal-customer')">
+          <i data-lucide="user-plus" style="width:14px;height:14px;"></i> Add Customer
+        </button>
+      </div>
+    </div>
+    <div class="chart-card">
+      <h2 class="chart-title">REST API Endpoints</h2>
+      <div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.5rem;">
+        {% for ep in [('Instruments','/api/v1/instruments'),('Customers','/api/v1/customers'),('Transactions','/api/v1/transactions'),('Repairs','/api/v1/repairs')] %}
+        <a href="{{ ep[1] }}" target="_blank" class="btn btn-outline btn-sm">
+          <i data-lucide="external-link" style="width:13px;height:13px;"></i> {{ ep[0] }}
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Inline quick modals to keep things functional from dashboard -->
+{% include 'partials/modal_transaction.html' %}
+{% include 'partials/modal_repair.html' %}
+{% include 'partials/modal_customer.html' %}
+{% endblock %}

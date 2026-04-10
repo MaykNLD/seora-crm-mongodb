@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seora Music CRM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    Seora.
+    <small>Music CRM</small>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-group-label">Overview</span>
+    <a href="{{ url_for('dashboard') }}" class="nav-item {% if request.endpoint == 'dashboard' %}active{% endif %}">
+      <i data-lucide="layout-dashboard"></i> Dashboard
+    </a>
+
+    <span class="nav-group-label">Operations</span>
+    <a href="{{ url_for('instruments') }}" class="nav-item {% if request.endpoint in ['instruments','add_instrument','edit_instrument'] %}active{% endif %}">
+      <i data-lucide="music-2"></i> Inventory
+    </a>
+    <a href="{{ url_for('transactions') }}" class="nav-item {% if request.endpoint == 'transactions' %}active{% endif %}">
+      <i data-lucide="arrow-right-left"></i> Buy &amp; Sell
+    </a>
+    <a href="{{ url_for('repairs') }}" class="nav-item {% if request.endpoint == 'repairs' %}active{% endif %}">
+      <i data-lucide="wrench"></i> Repairs
+    </a>
+
+    <span class="nav-group-label">Directory</span>
+    <a href="{{ url_for('customers') }}" class="nav-item {% if request.endpoint == 'customers' %}active{% endif %}">
+      <i data-lucide="users"></i> Customers
+    </a>
+    <a href="{{ url_for('suppliers') }}" class="nav-item {% if request.endpoint == 'suppliers' %}active{% endif %}">
+      <i data-lucide="truck"></i> Suppliers
+    </a>
+    <a href="{{ url_for('employees') }}" class="nav-item {% if request.endpoint == 'employees' %}active{% endif %}">
+      <i data-lucide="badge-check"></i> Employees
+    </a>
+
+    <span class="nav-group-label">API</span>
+    <a href="/api/v1/dashboard" target="_blank" class="nav-item">
+      <i data-lucide="code-2"></i> REST API v1
+    </a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">A</div>
+      <div>
+        <p class="user-name">Admin User</p>
+        <p class="user-role">Manager</p>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main>
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="flash-container" style="margin-bottom:1.25rem;">
+    {% for category, message in messages %}
+    <div class="flash {{ category }}">
+      <i data-lucide="{% if category == 'success' %}check-circle{% elif category == 'info' %}info{% else %}alert-circle{% endif %}" style="width:16px;height:16px;"></i>
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+</main>
+
+<!-- Modal open/close JS (no framework needed) -->
+<script>
+  // Initialize Lucide icons
+  lucide.createIcons();
+
+  // Generic modal helpers
+  function openModal(id) {
+    document.getElementById(id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // Close on backdrop click
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal-backdrop')) {
+      e.target.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+</body>
+</html>

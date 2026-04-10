@@ -1,0 +1,55 @@
+<div class="modal-backdrop" id="modal-transaction">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Register Transaction</h2>
+      <button class="modal-close" onclick="closeModal('modal-transaction')">&times;</button>
+    </div>
+    <form action="{{ url_for('add_transaction') }}" method="POST">
+      <div class="form-grid">
+        <div class="form-row">
+          <label>Type</label>
+          <select name="type" required>
+            <option value="sale">Sale (to customer)</option>
+            <option value="purchase">Purchase (from customer)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Payment Method</label>
+          <select name="payment_method">
+            <option value="Card">Card</option>
+            <option value="Cash">Cash</option>
+            <option value="Transfer">Bank Transfer</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Customer</label>
+          <select name="customer_id" required>
+            {% for c in customers if customers is defined %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Instrument</label>
+          <select name="instrument_id" required>
+            {% for i in instruments if instruments is defined %}
+            <option value="{{ i.id }}">{{ i.name }} ({{ i.condition }})</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Amount (&euro;)</label>
+          <input type="number" name="amount" step="0.01" min="0" required>
+        </div>
+        <div class="form-row">
+          <label>Notes</label>
+          <input type="text" name="notes" placeholder="Optional notes...">
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-transaction')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </div>
+    </form>
+  </div>
+</div>

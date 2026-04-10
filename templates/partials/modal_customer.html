@@ -1,0 +1,36 @@
+<div class="modal-backdrop" id="modal-customer">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">Add Customer</h2>
+      <button class="modal-close" onclick="closeModal('modal-customer')">&times;</button>
+    </div>
+    <form action="{{ url_for('add_customer') }}" method="POST">
+      <div class="form-grid">
+        <div class="form-row span2">
+          <label>Full Name <span class="required-star">*</span></label>
+          <input type="text" name="name" required placeholder="e.g. Carlos Mendez">
+        </div>
+        <div class="form-row">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="carlos@email.com">
+        </div>
+        <div class="form-row">
+          <label>Phone</label>
+          <input type="text" name="phone" placeholder="+34 600 000 000">
+        </div>
+        <div class="form-row span2">
+          <label>Segment</label>
+          <select name="segment">
+            <option value="Occasional">Occasional</option>
+            <option value="Frequent">Frequent</option>
+            <option value="VIP">VIP</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-customer')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Add Customer</button>
+      </div>
+    </form>
+  </div>
+</div>

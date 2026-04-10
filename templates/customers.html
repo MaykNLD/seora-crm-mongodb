@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Customer Directory</h1>
+      <p class="page-subtitle">{{ customers|length }} total customers. Manage relationships and segments.</p>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-customer')">
+      <i data-lucide="user-plus" style="width:16px;height:16px;"></i> Add Customer
+    </button>
+  </header>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Contact Info</th>
+          <th>Segment</th>
+          <th>Registered</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td>
+            <p class="cell-primary">{{ c.name }}</p>
+          </td>
+          <td>
+            <p style="font-size:0.9rem;">{{ c.email or 'No email' }}</p>
+            <p style="font-size:0.8rem; color:var(--text-secondary);">{{ c.phone or 'No phone' }}</p>
+          </td>
+          <td><span class="badge badge-{{ c.segment.lower() }}">{{ c.segment }}</span></td>
+          <td style="color:var(--text-secondary); font-size:0.85rem;">{{ c.created_at.strftime('%Y-%m-%d') if c.created_at else 'N/A' }}</td>
+          <td>
+            <div class="actions">
+              <form action="{{ url_for('delete_customer', id=c.id) }}" method="POST" onsubmit="return confirm('Delete this customer?')">
+                <button type="submit" class="btn btn-danger btn-icon btn-sm">
+                  <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% include 'partials/modal_customer.html' %}
+{% endblock %}

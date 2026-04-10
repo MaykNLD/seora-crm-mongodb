@@ -1,0 +1,49 @@
+<div class="modal-backdrop" id="modal-repair">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title">New Repair Order</h2>
+      <button class="modal-close" onclick="closeModal('modal-repair')">&times;</button>
+    </div>
+    <form action="{{ url_for('add_repair') }}" method="POST">
+      <div class="form-grid">
+        <div class="form-row">
+          <label>Customer <span class="required-star">*</span></label>
+          <select name="customer_id" required>
+            {% for c in customers if customers is defined %}
+            <option value="{{ c.id }}">{{ c.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Instrument <span class="required-star">*</span></label>
+          <select name="instrument_id" required>
+            {% for i in instruments if instruments is defined %}
+            <option value="{{ i.id }}">{{ i.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Technician</label>
+          <select name="technician_id">
+            <option value="">-- Unassigned --</option>
+            {% for t in techs if techs is defined %}
+            <option value="{{ t.id }}">{{ t.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Estimated Cost (&euro;)</label>
+          <input type="number" name="estimated_cost" step="0.01" min="0" value="0">
+        </div>
+        <div class="form-row span2">
+          <label>Problem Description <span class="required-star">*</span></label>
+          <textarea name="problem" placeholder="Describe the issue with the instrument..." required></textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" onclick="closeModal('modal-repair')">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Order</button>
+      </div>
+    </form>
+  </div>
+</div>

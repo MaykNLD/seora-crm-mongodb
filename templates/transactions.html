@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Buy &amp; Sell</h1>
+      <p class="page-subtitle">{{ transactions|length }} total transactions. Track purchases from customers and sales.</p>
+    </div>
+    <button class="btn btn-primary" onclick="openModal('modal-transaction')">
+      <i data-lucide="plus" style="width:16px;height:16px;"></i> New Transaction
+    </button>
+  </header>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Type</th>
+          <th>Customer</th>
+          <th>Instrument</th>
+          <th>Amount</th>
+          <th>Payment</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for tx, customer, instrument in transactions %}
+        <tr>
+          <td style="color:var(--text-secondary); font-size:0.8rem;">#{{ tx.id }}</td>
+          <td><span class="badge badge-{{ tx.type }}">{{ tx.type|capitalize }}</span></td>
+          <td>
+            <p class="cell-primary">{{ customer.name }}</p>
+            <span class="badge badge-{{ customer.segment.lower() }}" style="font-size:0.65rem;">{{ customer.segment }}</span>
+          </td>
+          <td>
+            <p class="cell-primary">{{ instrument.name }}</p>
+            <p class="cell-secondary">{{ instrument.brand }}</p>
+          </td>
+          <td class="cell-price">&euro;{{ "{:,.0f}".format(tx.amount) }}</td>
+          <td><span style="color:var(--text-secondary); font-size:0.88rem;">{{ tx.payment_method }}</span></td>
+          <td style="color:var(--text-secondary); font-size:0.85rem; white-space:nowrap;">{{ tx.date.strftime('%b %d, %Y') }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7"><div class="empty-state"><i data-lucide="receipt" style="width:40px;height:40px;"></i><h3>No transactions yet</h3><p>Register your first purchase or sale using the button above.</p></div></td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% include 'partials/modal_transaction.html' %}
+{% endblock %}

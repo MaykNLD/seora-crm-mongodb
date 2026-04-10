@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">{{ action }} Instrument</h1>
+      <p class="page-subtitle">{% if action == 'Add' %}Register a new instrument in the catalog.{% else %}Update the details for this instrument.{% endif %}</p>
+    </div>
+    <a href="{{ url_for('instruments') }}" class="btn btn-outline">
+      <i data-lucide="arrow-left" style="width:16px;height:16px;"></i> Back to Inventory
+    </a>
+  </header>
+
+  <div style="background:var(--bg-surface); border:1px solid var(--border-color); border-radius:var(--radius); padding:2rem; max-width:720px;">
+    <form method="POST">
+      <div class="form-grid">
+        <div class="form-row span2">
+          <label>Instrument Name <span class="required-star">*</span></label>
+          <input type="text" name="name" value="{{ instrument.name if instrument else '' }}" required placeholder="e.g. Fender American Professional II Stratocaster">
+        </div>
+        <div class="form-row">
+          <label>Brand <span class="required-star">*</span></label>
+          <input type="text" name="brand" value="{{ instrument.brand if instrument else '' }}" required placeholder="e.g. Fender">
+        </div>
+        <div class="form-row">
+          <label>Type <span class="required-star">*</span></label>
+          <select name="type">
+            {% set types = ['Electric Guitar','Acoustic Guitar','Bass Guitar','Piano','Keyboard','Electronic Drums','Acoustic Drums','Violin','Cello','Flute','Trumpet','Saxophone','Other'] %}
+            {% for t in types %}
+            <option value="{{ t }}" {% if instrument and instrument.type == t %}selected{% endif %}>{{ t }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Condition <span class="required-star">*</span></label>
+          <select name="condition">
+            {% for c in ['New','Used','Repairing'] %}
+            <option value="{{ c }}" {% if instrument and instrument.condition == c %}selected{% endif %}>{{ c }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <label>Serial Number</label>
+          <input type="text" name="serial_number" value="{{ instrument.serial_number if instrument else '' }}" placeholder="e.g. US22012345">
+        </div>
+        <div class="form-row">
+          <label>Buy Price (&euro;) <span class="required-star">*</span></label>
+          <input type="number" name="buy_price" step="0.01" min="0" value="{{ instrument.buy_price if instrument else 0 }}" required>
+        </div>
+        <div class="form-row">
+          <label>Sell Price (&euro;) <span class="required-star">*</span></label>
+          <input type="number" name="sell_price" step="0.01" min="0" value="{{ instrument.sell_price if instrument else 0 }}" required>
+        </div>
+        <div class="form-row">
+          <label>Stock Quantity <span class="required-star">*</span></label>
+          <input type="number" name="stock" min="0" value="{{ instrument.stock if instrument else 0 }}" required>
+        </div>
+        <div class="form-row span2">
+          <label>Description</label>
+          <textarea name="description" placeholder="Describe the instrument, its history or notable features...">{{ instrument.description if instrument else '' }}</textarea>
+        </div>
+      </div>
+      <div class="form-actions">
+        <a href="{{ url_for('instruments') }}" class="btn btn-outline">Cancel</a>
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="save" style="width:15px;height:15px;"></i> {{ action }} Instrument
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

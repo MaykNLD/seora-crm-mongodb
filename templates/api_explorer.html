@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">REST API Explorer</h1>
+      <p class="page-subtitle">v1.0 &bull; Interactive endpoint documentation and live testing.</p>
+    </div>
+    <div class="btn btn-outline">
+      <span class="stock-dot dot-instock"></span> API Status: Online
+    </div>
+  </header>
+
+  <div class="dash-grid" style="grid-template-columns: 1fr 1fr;">
+    <div class="table-card" style="padding:1.5rem;">
+      <h2 style="margin-bottom:1.5rem; font-size:1.2rem;">Endpoints</h2>
+      
+      {% set endpoints = [
+        ('GET', '/api/v1/instruments', 'List all instruments in catalog'),
+        ('GET', '/api/v1/customers', 'List all registered customers'),
+        ('GET', '/api/v1/transactions', 'History of all buy/sell events'),
+        ('GET', '/api/v1/repairs', 'Workshop repair order directory'),
+        ('GET', '/api/v1/dashboard', 'High-level business metadata')
+      ] %}
+
+      {% for method, path, desc in endpoints %}
+      <div class="recent-item" style="cursor:pointer; border:1px solid var(--border-color); border-radius:8px; padding:1rem; margin-bottom:0.75rem;" onclick="testApi('{{ path }}')">
+        <div style="display:flex; align-items:center; gap:0.75rem;">
+          <span style="background:var(--success-dim); color:var(--success); font-weight:700; font-size:0.7rem; padding:0.2rem 0.6rem; border-radius:4px;">{{ method }}</span>
+          <div>
+            <p style="font-weight:600; font-size:0.9rem; font-family:monospace;">{{ path }}</p>
+            <p style="font-size:0.8rem; color:var(--text-secondary);">{{ desc }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="recent-card" style="display:flex; flex-direction:column; min-height:500px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <h2 style="font-size:1.1rem; margin:0;">Response</h2>
+        <span id="response-status" style="font-size:0.8rem;">Select an endpoint</span>
+      </div>
+      <pre id="response-viewer" style="flex:1; background:var(--bg-main); border:1px solid var(--border-color); border-radius:8px; padding:1rem; color:var(--accent-gold); font-size:0.85rem; overflow:auto; margin:0;">
+// Click an endpoint to fetch live data
+      </pre>
+    </div>
+  </div>
+</div>
+
+<script>
+async function testApi(url) {
+  const viewer = document.getElementById('response-viewer');
+  const statusEl = document.getElementById('response-status');
+  
+  viewer.textContent = 'Fetching...';
+  statusEl.textContent = 'Loading ' + url;
+  
+  try {
+    const start = performance.now();
+    const response = await fetch(url);
+    const data = await response.json();
+    const end = performance.now();
+    
+    viewer.textContent = JSON.stringify(data, null, 2);
+    statusEl.innerHTML = `<span style="color:var(--success)">200 OK</span> &bull; ${Math.round(end - start)}ms`;
+  } catch (err) {
+    viewer.textContent = 'Error fetching API: ' + err.message;
+    statusEl.innerHTML = `<span style="color:var(--danger)">Connection Failed</span>`;
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Global Suppliers</h1>
+      <p class="page-subtitle">Manage your supply chain and brand partnerships.</p>
+    </div>
+    <button class="btn btn-primary">
+      <i data-lucide="plus" style="width:16px;height:16px;"></i> Add Supplier
+    </button>
+  </header>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Supplier</th>
+          <th>Contact Person</th>
+          <th>Email / Phone</th>
+          <th>Address</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in suppliers %}
+        <tr>
+          <td><p class="cell-primary">{{ s.name }}</p></td>
+          <td><p style="font-size:0.9rem;">{{ s.contact or '---' }}</p></td>
+          <td>
+            <p style="font-size:0.88rem;">{{ s.email }}</p>
+            <p style="font-size:0.8rem; color:var(--text-secondary);">{{ s.phone }}</p>
+          </td>
+          <td><p style="font-size:0.82rem; color:var(--text-secondary);">{{ s.address }}</p></td>
+          <td>
+            <div class="actions">
+              <form action="{{ url_for('delete_supplier', id=s.id) }}" method="POST" onsubmit="return confirm('Delete this supplier?')">
+                <button type="submit" class="btn btn-danger btn-icon btn-sm">
+                  <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

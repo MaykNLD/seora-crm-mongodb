@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page">
+  <header class="page-header">
+    <div>
+      <h1 class="page-title">Our Team</h1>
+      <p class="page-subtitle">Manage staff, assignments and workshop permissions.</p>
+    </div>
+    <button class="btn btn-primary">
+      <i data-lucide="user-plus" style="width:16px;height:16px;"></i> Register Employee
+    </button>
+  </header>
+
+  <div class="table-card">
+    <table>
+      <thead>
+        <tr>
+          <th>Employee</th>
+          <th>Email</th>
+          <th>Current Role</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in employees %}
+        <tr>
+          <td><p class="cell-primary">{{ e.name }}</p></td>
+          <td><p style="font-size:0.9rem;">{{ e.email }}</p></td>
+          <td><span class="badge badge-{{ e.role.lower() }}">{{ e.role }}</span></td>
+          <td>
+            <div class="actions">
+              <form action="{{ url_for('delete_employee', id=e.id) }}" method="POST" onsubmit="return confirm('Remove this employee?')">
+                <button type="submit" class="btn btn-danger btn-icon btn-sm">
+                  <i data-lucide="trash-2" style="width:14px;height:14px;"></i>
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

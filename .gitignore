@@ -1,0 +1,14 @@
+# Environment variables (NEVER commit these)
+.env
+
+# JSON sandbox database (auto-generated, not source code)
+data/sandbox_db.json
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+*.egg-info/
+
+# Docker
+*.log

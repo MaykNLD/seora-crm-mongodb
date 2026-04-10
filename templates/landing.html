@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seora | Premium Music CRM</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    body { display: block; overflow-x: hidden; }
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top right, #2a221a, var(--bg-main));
+      text-align: center;
+      padding: 2rem;
+    }
+    .hero-logo { font-family: var(--font-serif); font-size: 4rem; color: var(--accent-gold); margin-bottom: 1rem; italic: true; }
+    .hero-title { font-size: 3.5rem; max-width: 800px; margin-bottom: 1.5rem; line-height: 1.1; }
+    .hero-subtitle { color: var(--text-secondary); font-size: 1.25rem; max-width: 600px; margin-bottom: 2.5rem; }
+    .hero-btns { display: flex; gap: 1rem; }
+    
+    .features { padding: 8rem 2rem; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; }
+    .feature-card { background: var(--bg-surface); border: 1px solid var(--border-color); padding: 2.5rem; border-radius: 16px; transition: transform 0.3s; }
+    .feature-card:hover { transform: translateY(-10px); border-color: var(--accent-gold); }
+    .feature-icon { color: var(--accent-gold); margin-bottom: 1.5rem; }
+    .feature-name { font-size: 1.5rem; margin-bottom: 1rem; }
+    .feature-desc { color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6; }
+
+    .stat-bar { background: var(--accent-gold); padding: 5rem 2rem; color: var(--bg-main); display: flex; justify-content: space-around; text-align: center; }
+    .stat-item h2 { font-size: 3rem; margin-bottom: 0.5rem; }
+    .stat-item p { font-weight: 600; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
+
+    footer { padding: 4rem 2rem; text-align: center; border-top: 1px solid var(--border-color); color: var(--text-secondary); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-logo">Seora.</div>
+    <h1 class="hero-title">Orchestrate Your Music Business with <span style="color:var(--accent-gold)">Precision</span></h1>
+    <p class="hero-subtitle">The all-in-one CRM designed exclusively for elite instrument shops, workshops, and musical curators.</p>
+    <div class="hero-btns">
+      <a href="{{ url_for('dashboard') }}" class="btn btn-primary" style="padding:1rem 2.5rem; font-size:1.1rem;">Enter Dashboard</a>
+      <a href="/api" class="btn btn-outline" style="padding:1rem 2.5rem; font-size:1.1rem;">API Explorer</a>
+    </div>
+  </section>
+
+  <section class="stat-bar">
+    <div class="stat-item">
+      <h2>&euro;{{ "{:,.0f}".format(stats.total_revenue) }}</h2>
+      <p>Revenue Tracked</p>
+    </div>
+    <div class="stat-item">
+      <h2>{{ stats.instruments_sold }}</h2>
+      <p>Sales Processed</p>
+    </div>
+    <div class="stat-item">
+      <h2>{{ stats.active_repairs }}</h2>
+      <p>Workshop Tasks</p>
+    </div>
+  </section>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="feature-icon"><i data-lucide="music-2" style="width:40px;height:40px;"></i></div>
+      <h3 class="feature-name">Inventory Control</h3>
+      <p class="feature-desc">Sophisticated tracking of high-end instruments, serial numbers, and condition reports.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i data-lucide="wrench" style="width:40px;height:40px;"></i></div>
+      <h3 class="feature-name">Workshop Kanban</h3>
+      <p class="feature-desc">A specialized repair pipeline to manage technician assignments and order statuses.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i data-lucide="code-2" style="width:40px;height:40px;"></i></div>
+      <h3 class="feature-name">Developer First</h3>
+      <p class="feature-desc">Fully documented REST API to integrate your store with any third-party ecosystem.</p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2024 Seora Music CRM. Elevating the craft of musical management.
+  </footer>
+
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
